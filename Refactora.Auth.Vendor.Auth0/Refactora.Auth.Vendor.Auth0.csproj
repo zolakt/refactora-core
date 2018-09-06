@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Refactora.Auth.Vendor.Auth0</PackageId>
+    <Authors>Refactora</Authors>
+    <Company>Refactora</Company>
+    <Product>Refactora.Auth</Product>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Auth0.ManagementApi" Version="5.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Refactora.Auth\Refactora.Auth.csproj" />
+  </ItemGroup>
+
+</Project>
