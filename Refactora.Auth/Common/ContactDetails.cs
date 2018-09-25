@@ -12,7 +12,7 @@
 
 		public string FullName
 		{
-			get { return string.Join(' ', new[] { FirstName, LastName }); }
+			get { return string.Join(' ', new[] { FirstName, LastName }).Trim(); }
 		}
 	}
 }
