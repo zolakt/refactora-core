@@ -8,11 +8,12 @@ namespace Refactora.Auth
 {
 	public static class AuthExtensions
 	{
-		public static IMvcCoreBuilder AddAuthModule(this IMvcCoreBuilder builder,
+		public static IMvcCoreBuilder AddDefaultAuth(this IMvcCoreBuilder builder,
 			string host,
 			string clientHost,
 			string clientAudience,
-			string scheme = JwtBearerDefaults.AuthenticationScheme)
+			string scheme = JwtBearerDefaults.AuthenticationScheme,
+			bool autmapDefaults = true)
 		{
 			builder.Services
 				   .AddAuthorization()
@@ -37,21 +38,66 @@ namespace Refactora.Auth
 
 			builder.Services
 				.AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
-				.AddTransient<IContactDetails, ContactDetails>()
-				.AddScoped<IAuthProvider, IdentityAuthProvider>();
+				.AddTransient<IContactDetails, ContactDetails>();
+
+			if (autmapDefaults) { 
+				builder.Services.AddScoped<IAuthProvider, IdentityAuthProvider>();
+			}
 
 			return builder;
 		}
 
-		public static IMvcCoreBuilder AddAuthModule<TAuthProviderInterface, TAuthProviderImplementation>(this IMvcCoreBuilder builder,
+		public static IMvcCoreBuilder AddDefaultAuth<TEntityType>(this IMvcCoreBuilder builder,
 			string host,
 			string clientHost,
 			string clientAudience,
 			string scheme = JwtBearerDefaults.AuthenticationScheme)
 		{
-			AddAuthModule(builder, host, clientHost, clientAudience, scheme);
+			AddDefaultAuth(builder, host, clientHost, clientAudience, scheme);
 
-			builder.Services.AddScoped(typeof(TAuthProviderInterface), typeof(TAuthProviderImplementation));
+			builder.Services.AddScoped<IAuthProvider<TEntityType>, IdentityAuthProvider<TEntityType>>();
+
+			return builder;
+		}
+
+		public static IMvcCoreBuilder AddDefaultAuth<TEntityType, TPermissionType>(this IMvcCoreBuilder builder,
+			string host,
+			string clientHost,
+			string clientAudience,
+			string scheme = JwtBearerDefaults.AuthenticationScheme)
+		{
+			AddDefaultAuth<TEntityType>(builder, host, clientHost, clientAudience,scheme);
+
+			builder.Services.AddScoped<IAuthProvider<TEntityType, TPermissionType>, IdentityAuthProvider<TEntityType, TPermissionType>>();
+
+			return builder;
+		}
+
+
+		public static IMvcCoreBuilder AddCustomAuth<TAuthProviderImplementation>(this IMvcCoreBuilder builder,
+			string host,
+			string clientHost,
+			string clientAudience,
+			string scheme = JwtBearerDefaults.AuthenticationScheme)
+			where TAuthProviderImplementation : IAuthProvider
+		{
+			AddDefaultAuth(builder, host, clientHost, clientAudience, scheme, false);
+
+			builder.Services.AddScoped(typeof(IAuthProvider), typeof(TAuthProviderImplementation));
+
+			return builder;
+		}
+
+		public static IMvcCoreBuilder AddCustomAuth<TAuthProviderImplementation, IAuthProviderInterface>(this IMvcCoreBuilder builder,
+			string host,
+			string clientHost,
+			string clientAudience,
+			string scheme = JwtBearerDefaults.AuthenticationScheme)
+			where TAuthProviderImplementation : IAuthProvider
+		{
+			AddCustomAuth<TAuthProviderImplementation>(builder, host, clientHost, clientAudience, scheme);
+
+			builder.Services.AddScoped(typeof(IAuthProviderInterface), typeof(TAuthProviderImplementation));
 
 			return builder;
 		}

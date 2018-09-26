@@ -16,16 +16,12 @@ namespace Refactora.Auth.Provider
 
 		public virtual bool IsAuthenticated
 		{
-			get
-			{
-				var user = GetClaimsUser();
-				return user?.Identity?.IsAuthenticated ?? false;
-			}
+			get { return IdentityUser?.Identity?.IsAuthenticated ?? false; }
 		}
 
-		protected virtual ClaimsPrincipal GetClaimsUser()
+		protected virtual ClaimsPrincipal IdentityUser
 		{
-			return _contextAccessor?.HttpContext?.User;
+			get	{ return _contextAccessor?.HttpContext?.User; }
 		}
 	}
 
@@ -33,14 +29,14 @@ namespace Refactora.Auth.Provider
 	{
 		protected readonly IDataMapper _mapper;
 
-		public IdentityAuthProvider(IHttpContextAccessor contextAccessor, IDataMapper mapper): base(contextAccessor)
+		public IdentityAuthProvider(IHttpContextAccessor contextAccessor, IDataMapper mapper) : base(contextAccessor)
 		{
 			_mapper = mapper ?? throw new ArgumentNullException("mapper");
 		}
 
 		public virtual TEntityType CurrentUser
 		{
-			get { return _mapper.Map<TEntityType>(GetClaimsUser()); }
+			get { return _mapper.Map<TEntityType>(IdentityUser); }
 		}
 	}
 

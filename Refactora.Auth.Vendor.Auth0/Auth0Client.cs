@@ -14,10 +14,10 @@ namespace Refactora.Auth.Vendor.Auth0
 
 		public Auth0Client(string host, string clientId, string clientSecret, string clientAudience)
 		{
-			Host = host ?? throw new ArgumentNullException("host");
-			_clientId = clientId ?? throw new ArgumentNullException("clientId");
-			_clientSecret = clientSecret ?? throw new ArgumentNullException("clientSecret");
-			_clientAudience = clientAudience ?? throw new ArgumentNullException("clientAudience");
+			Host = !string.IsNullOrEmpty(host) ? host : throw new ArgumentNullException("host");
+			_clientId = !string.IsNullOrEmpty(clientId) ? clientId : throw new ArgumentNullException("clientId");
+			_clientSecret = !string.IsNullOrEmpty(clientSecret) ? clientSecret : throw new ArgumentNullException("clientSecret");
+			_clientAudience = clientAudience;
 		}
 
 		public string Host { get; private set; }
