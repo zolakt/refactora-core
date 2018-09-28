@@ -17,8 +17,14 @@ namespace Refactora.Validation.Specification.Common.Range
 		  IEquatable<TValueType>,
 		  IFormattable
 	{
-		protected readonly IEnumerable<IBusinessRule> _rules;
 		protected readonly PropertyInfo _propertyInfo;
+
+		public IEnumerable<IBusinessRule> AvailableRules { get; }
+
+		public TValueType Min { get; }
+
+		public TValueType Max { get; }
+
 
 		public RangeSpecification(Expression<Func<TEntityType, TValueType>> field, TValueType min, TValueType max, 
 			string description = null, string tag = null) : this(field, min, max, description, !string.IsNullOrEmpty(tag) ? new [] { tag } : new string[] { }) { }
@@ -39,20 +45,20 @@ namespace Refactora.Validation.Specification.Common.Range
 
 			_propertyInfo = property;
 
+			var targetDescription = description ?? _propertyInfo.Name + " not in range";
+			var targetTags = tags.Any() ? tags : new[] { _propertyInfo.Name };
+
 			tags = tags.Any() ? tags : new[] { _propertyInfo.Name };
-			_rules = new[] { new ValidationRule(description ?? _propertyInfo.Name + " not in range", tags) };
+			AvailableRules = new[] { new ValidationRule(targetDescription, targetTags) };
 		}
 
-		public TValueType Min { get; }
-
-		public TValueType Max { get; }
 
 		public async Task<IEnumerable<IBusinessRule>> GetBrokenRulesAsync(TEntityType entity = default(TEntityType))
 		{
 			var value = _propertyInfo.GetValue(entity) as IComparable;
 
 			return await Task.FromResult(((value == null) || (value.CompareTo(Min) < 0) || (value.CompareTo(Max) > 0))
-				? _rules : new IBusinessRule[] { });
+				? AvailableRules : new IBusinessRule[] { });
 		}
 	}
 }

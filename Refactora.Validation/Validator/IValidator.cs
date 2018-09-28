@@ -1,10 +1,20 @@
 ﻿using Refactora.Validation.Rules;
+using Refactora.Validation.Specification;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Refactora.Validation.Validator
 {
-	public interface IValidator<in TEntityType>
+	public interface IValidator
+	{
+		/// <summary>
+		/// Lists of all available specification
+		/// Used for validation export
+		/// </summary>
+		IEnumerable<ISpecification> AvailableSpecifications { get; }
+	}
+
+	public interface IValidator<in TEntityType>: IValidator
 	{
 		/// <summary>
 		/// Check if entity valid

@@ -11,8 +11,14 @@ namespace Refactora.Validation.Specification.Common.Length
 {
 	public class LengthSpecification<TEntityType> : ILenghtSpecification<TEntityType>
 	{
-		protected readonly IEnumerable<IBusinessRule> _rules;
 		protected readonly PropertyInfo _propertyInfo;
+
+		public IEnumerable<IBusinessRule> AvailableRules { get; }
+
+		public int Min { get; }
+
+		public int Max { get; }
+
 
 		public LengthSpecification(Expression<Func<TEntityType, object>> field, int min, int max, 
 			string description = null, string tag = null) :
@@ -26,13 +32,12 @@ namespace Refactora.Validation.Specification.Common.Length
 
 			_propertyInfo = field.GetPropertyInfo();
 
-			tags = tags.Any() ? tags : new[] { _propertyInfo.Name };
-			_rules = new[] { new ValidationRule(description ?? _propertyInfo.Name + " lenght not in range", tags) };
+			var targetDescription = description ?? _propertyInfo.Name + " lenght not in range";
+			var targetTags = tags.Any() ? tags : new[] { _propertyInfo.Name };
+
+			AvailableRules = new[] { new ValidationRule(targetDescription, targetTags) };
 		}
 
-		public int Min { get; }
-
-		public int Max { get; }
 
 		public async Task<IEnumerable<IBusinessRule>> GetBrokenRulesAsync(TEntityType entity = default(TEntityType))
 		{
@@ -40,7 +45,7 @@ namespace Refactora.Validation.Specification.Common.Length
 			var length = (value as Array)?.Length ?? (value as string)?.Length ?? 0;
 
 			return await Task.FromResult(((length < Min) || (length > Max))
-				? _rules : new IBusinessRule[] { });
+				? AvailableRules : new IBusinessRule[] { });
 		}
 	}
 }

@@ -12,8 +12,12 @@ namespace Refactora.Validation.Specification.Common.Regex
 {
 	public class RegexSpecification<TEntityType> : IRegexSpecification<TEntityType>
 	{
-		protected readonly IEnumerable<IBusinessRule> _rules;
 		protected readonly PropertyInfo _propertyInfo;
+
+		public IEnumerable<IBusinessRule> AvailableRules { get; }
+
+		public string Format { get; }
+
 
 		public RegexSpecification(Expression<Func<TEntityType, string>> field, string regex, 
 			string description = null, string tag = null) :
@@ -26,18 +30,19 @@ namespace Refactora.Validation.Specification.Common.Regex
 
 			_propertyInfo = field.GetPropertyInfo();
 
-			tags = tags.Any() ? tags : new[] { _propertyInfo.Name };
-			_rules = new[] { new ValidationRule(description ?? _propertyInfo.Name + " invalid format", tags) };
+			var targetDescription = description ?? _propertyInfo.Name + " invalid format";
+			var targetTags = tags.Any() ? tags : new[] { _propertyInfo.Name };
+
+			AvailableRules = new[] { new ValidationRule(targetDescription, targetTags) };
 		}
 
-		public string Format { get; }
 
 		public async Task<IEnumerable<IBusinessRule>> GetBrokenRulesAsync(TEntityType entity = default(TEntityType))
 		{
 			var value = _propertyInfo.GetValue(entity) as string;
 
 			return await Task.FromResult(!System.Text.RegularExpressions.Regex.IsMatch(value, Format, RegexOptions.IgnoreCase)
-				? _rules : new IBusinessRule[] { });
+				? AvailableRules : new IBusinessRule[] { });
 		}
 	}
 }

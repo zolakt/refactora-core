@@ -19,6 +19,11 @@ namespace Refactora.Validation.Validator
 			_specifications = specifications;
 		}
 
+		public IEnumerable<ISpecification> AvailableSpecifications
+		{
+			get { return _specifications; }
+		}
+
 		public async Task<bool> IsValidAsync(TEntityType entity)
 		{
 			return !(await GetBrokenRulesAsync(entity)).Any();

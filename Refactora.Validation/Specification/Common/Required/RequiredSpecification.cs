@@ -11,8 +11,10 @@ namespace Refactora.Validation.Specification.Common.Required
 {
 	public class RequiredSpecification<TEntityType> : IRequiredSpecification<TEntityType>
 	{
-		protected readonly IEnumerable<IBusinessRule> _rules;
 		protected readonly PropertyInfo _propertyInfo;
+
+		public IEnumerable<IBusinessRule> AvailableRules { get; }
+
 
 		public RequiredSpecification(Expression<Func<TEntityType, object>> field, string description = null, string tag = null) :
 			this(field, description, !string.IsNullOrEmpty(tag) ? new [] { tag } : new string[] { }) { }
@@ -21,14 +23,17 @@ namespace Refactora.Validation.Specification.Common.Required
 		{
 			_propertyInfo = field.GetPropertyInfo();
 
-			tags = tags.Any() ? tags : new[] { _propertyInfo.Name };
-			_rules = new[] { new ValidationRule(description ?? _propertyInfo.Name + " required", tags) };
+			var targetDescription = description ?? _propertyInfo.Name + " required";
+			var targetTags = tags.Any() ? tags : new[] { _propertyInfo.Name };
+
+			AvailableRules = new[] { new ValidationRule(targetDescription, targetTags) };
 		}
+
 
 		public async Task<IEnumerable<IBusinessRule>> GetBrokenRulesAsync(TEntityType entity = default(TEntityType))
 		{
 			var value = _propertyInfo.GetValue(entity);
-			return await Task.FromResult(value.IsNullOrEmpty() ? _rules : new IBusinessRule[] { });
+			return await Task.FromResult(value.IsNullOrEmpty() ? AvailableRules : new IBusinessRule[] { });
 		}
 	}
 }
