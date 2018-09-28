@@ -4,6 +4,7 @@ using Refactora.Auth.Provider;
 using Refactora.Common.Mapper;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Test.Refactora.Auth.Fakes
 {
@@ -29,9 +30,10 @@ namespace Test.Refactora.Auth.Fakes
 			}
 		}
 
-		public bool HasPermission(string permission)
+		public async Task<bool> HasPermissionAsync(string permission)
 		{
-			return CurrentUser?.Permissions?.Contains(permission) ?? false;
+			var user = await GetCurrentUserAsync();
+			return user?.Permissions?.Contains(permission) ?? false;
 		}
 	}
 }

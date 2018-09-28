@@ -2,6 +2,7 @@
 using Refactora.Common.Mapper;
 using System;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Refactora.Auth.Provider
 {
@@ -14,9 +15,9 @@ namespace Refactora.Auth.Provider
 			_contextAccessor = contextAccessor ?? throw new ArgumentNullException("contextAccessor");
 		}
 
-		public virtual bool IsAuthenticated
+		public virtual async Task<bool> IsAuthenticatedAsync()
 		{
-			get { return IdentityUser?.Identity?.IsAuthenticated ?? false; }
+			return await Task.FromResult(IdentityUser?.Identity?.IsAuthenticated ?? false);
 		}
 
 		protected virtual ClaimsPrincipal IdentityUser
@@ -34,9 +35,9 @@ namespace Refactora.Auth.Provider
 			_mapper = mapper ?? throw new ArgumentNullException("mapper");
 		}
 
-		public virtual TEntityType CurrentUser
+		public virtual async Task<TEntityType> GetCurrentUserAsync()
 		{
-			get { return _mapper.Map<TEntityType>(IdentityUser); }
+			return await Task.FromResult(_mapper.Map<TEntityType>(IdentityUser));
 		}
 	}
 
@@ -47,9 +48,9 @@ namespace Refactora.Auth.Provider
 		{
 		}
 
-		public virtual bool HasPermission(TPermissionType permission)
+		public virtual async Task<bool> HasPermissionAsync(TPermissionType permission)
 		{
-			return IsAuthenticated;
+			return await IsAuthenticatedAsync();
 		}
 	}
 }

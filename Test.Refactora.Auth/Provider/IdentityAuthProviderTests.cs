@@ -4,6 +4,7 @@ using Moq;
 using Refactora.Auth.Provider;
 using Refactora.Common.Mapper;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Test.Refactora.Auth.Fakes;
 
 namespace Test.Refactora.Auth.Provider
@@ -12,17 +13,17 @@ namespace Test.Refactora.Auth.Provider
 	public class IdentityAuthProviderTests
 	{
 		[TestMethod]
-		public void IsAuthenticatedTest()
+		public async Task IsAuthenticatedTest()
 		{
 			var http = new Mock<IHttpContextAccessor>();
 			http.Setup(x => x.HttpContext.User.Identity.IsAuthenticated).Returns(true);
 
 			var prov = new IdentityAuthProvider(http.Object);
-			Assert.IsTrue(prov.IsAuthenticated);
+			Assert.IsTrue(await prov.IsAuthenticatedAsync());
 		}
 
 		[TestMethod]
-		public void CurrentUserTest()
+		public async Task CurrentUserTest()
 		{
 			var user = new FakeUser
 			{
@@ -37,12 +38,14 @@ namespace Test.Refactora.Auth.Provider
 			mapper.Setup(x => x.Map<FakeUser>(It.IsAny<ClaimsPrincipal>())).Returns(user);
 
 			var provider = new IdentityAuthProvider<FakeUser>(http.Object, mapper.Object);
-			Assert.IsNotNull(provider.CurrentUser);
-			Assert.AreEqual(user.Id, provider.CurrentUser.Id);
+			var result = await provider.GetCurrentUserAsync();
+
+			Assert.IsNotNull(result);
+			Assert.AreEqual(user.Id, result.Id);
 		}
 
 		[TestMethod]
-		public void CheckPermissionTest()
+		public async Task CheckPermissionTest()
 		{
 			var user = new FakeUser
 			{
@@ -58,13 +61,14 @@ namespace Test.Refactora.Auth.Provider
 			mapper.Setup(x => x.Map<FakeUser>(It.IsAny<ClaimsPrincipal>())).Returns(user);
 
 			var provider = new IdentityAuthProvider<FakeUser, string>(http.Object, mapper.Object);
-			Assert.IsNotNull(provider.CurrentUser);
-			Assert.IsTrue(provider.HasPermission("test3")); // default implementation only checks IsAuthenticated
+
+			Assert.IsNotNull(await provider.GetCurrentUserAsync());
+			Assert.IsTrue(await provider.HasPermissionAsync("test3")); // default implementation only checks IsAuthenticated
 
 			var customProvider = new FakeAuthProvider(http.Object, mapper.Object, true);
-			Assert.IsNotNull(customProvider.CurrentUser);
-			Assert.IsFalse(customProvider.HasPermission("test3"));
-			Assert.IsTrue(customProvider.HasPermission("test2"));
+			Assert.IsNotNull(await customProvider.GetCurrentUserAsync());
+			Assert.IsFalse(await customProvider.HasPermissionAsync("test3"));
+			Assert.IsTrue(await customProvider.HasPermissionAsync("test2"));
 		}
 	}
 }

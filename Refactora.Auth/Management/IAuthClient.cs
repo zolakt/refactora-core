@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Refactora.Auth
+namespace Refactora.Auth.Management
 {
 	public interface IAuthClient
 	{

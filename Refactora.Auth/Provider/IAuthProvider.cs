@@ -1,17 +1,19 @@
-﻿namespace Refactora.Auth.Provider
+﻿using System.Threading.Tasks;
+
+namespace Refactora.Auth.Provider
 {
 	public interface IAuthProvider
 	{
-		bool IsAuthenticated { get; }
+		Task<bool> IsAuthenticatedAsync();
 	}
 
 	public interface IAuthProvider<TEntityType> : IAuthProvider
 	{
-		TEntityType CurrentUser { get; }
+		Task<TEntityType> GetCurrentUserAsync();
 	}
 
 	public interface IAuthProvider<TEntityType, TPermissionType> : IAuthProvider<TEntityType>
 	{
-		bool HasPermission(TPermissionType permission);
+		Task<bool> HasPermissionAsync(TPermissionType permission);
 	}
 }

@@ -9,11 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Refactora.Auth.Vendor.Auth0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Refactora.Common", "Refactora.Common\Refactora.Common.csproj", "{FA3B41DE-A19B-41DF-9643-508CB09EBAC6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{E7F5EDBA-225C-44E7-9B14-0EA77636EBF1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Refactora.Auth", "Test.Refactora.Auth\Test.Refactora.Auth.csproj", "{6D99130B-6A83-4521-86BD-C59A265AC555}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Refactora.Auth.Vendor.Auth0", "Test.Refactora.Auth.Vendor.Auth0\Test.Refactora.Auth.Vendor.Auth0.csproj", "{2CA3A4E8-FEC6-4C01-B209-892116A407CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Refactora.Auth.Vendor.Auth0", "Test.Refactora.Auth.Vendor.Auth0\Test.Refactora.Auth.Vendor.Auth0.csproj", "{2CA3A4E8-FEC6-4C01-B209-892116A407CC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Refactora.Common", "Test.Refactora.Common\Test.Refactora.Common.csproj", "{0A64F4F5-27F2-4E5F-8C24-392A247372E1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Refactora.Validation", "Refactora.Validation\Refactora.Validation.csproj", "{27B0C666-C90A-496A-86C1-25BF6A304F32}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.Refactora.Validation", "Test.Refactora.Validation\Test.Refactora.Validation.csproj", "{B040DFE4-3CC2-4E18-B8E4-15B7482C448D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +37,6 @@ Global
 		{FA3B41DE-A19B-41DF-9643-508CB09EBAC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA3B41DE-A19B-41DF-9643-508CB09EBAC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA3B41DE-A19B-41DF-9643-508CB09EBAC6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E7F5EDBA-225C-44E7-9B14-0EA77636EBF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E7F5EDBA-225C-44E7-9B14-0EA77636EBF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E7F5EDBA-225C-44E7-9B14-0EA77636EBF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E7F5EDBA-225C-44E7-9B14-0EA77636EBF1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6D99130B-6A83-4521-86BD-C59A265AC555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6D99130B-6A83-4521-86BD-C59A265AC555}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D99130B-6A83-4521-86BD-C59A265AC555}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +45,18 @@ Global
 		{2CA3A4E8-FEC6-4C01-B209-892116A407CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CA3A4E8-FEC6-4C01-B209-892116A407CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CA3A4E8-FEC6-4C01-B209-892116A407CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A64F4F5-27F2-4E5F-8C24-392A247372E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A64F4F5-27F2-4E5F-8C24-392A247372E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A64F4F5-27F2-4E5F-8C24-392A247372E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A64F4F5-27F2-4E5F-8C24-392A247372E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27B0C666-C90A-496A-86C1-25BF6A304F32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27B0C666-C90A-496A-86C1-25BF6A304F32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27B0C666-C90A-496A-86C1-25BF6A304F32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27B0C666-C90A-496A-86C1-25BF6A304F32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B040DFE4-3CC2-4E18-B8E4-15B7482C448D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B040DFE4-3CC2-4E18-B8E4-15B7482C448D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B040DFE4-3CC2-4E18-B8E4-15B7482C448D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B040DFE4-3CC2-4E18-B8E4-15B7482C448D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
